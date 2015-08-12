@@ -1,6 +1,7 @@
 package com.thevisitapp.visitapp;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,8 @@ public class CustomMainAdapter extends ArrayAdapter<String>{
         TextView textView = (TextView) rowView.findViewById(R.id.label);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
         textView.setText(values[position]);
-        // Change the icon for Windows and iPhone
+        Typeface roboto = Typeface.createFromAsset(context.getAssets(),"fonts/Roboto-Bold.ttf");
+        textView.setTypeface(roboto);
 
 
         return rowView;
