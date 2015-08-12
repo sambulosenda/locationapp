@@ -17,7 +17,7 @@ public class MainActivity extends ListActivity {
 
         String[] mainList= {"Services", "Shopping", "Play", "Dine", "Stay", "Texas A&M University"};
 
-        ListView list = (ListView) findViewById(R.id.list);
+        ListView list = (ListView) findViewById(android.R.id.list);
 
         CustomMainAdapter mainAdapter = new CustomMainAdapter(this, mainList);
         list.setAdapter(mainAdapter);
