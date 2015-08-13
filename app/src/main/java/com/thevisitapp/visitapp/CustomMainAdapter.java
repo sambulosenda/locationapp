@@ -9,15 +9,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by Rafa on 8/10/15.
  */
 public class CustomMainAdapter extends ArrayAdapter<String>{
 
     private final Context context;
-    private final String[] values;
+    private final ArrayList<String> values;
 
-    public CustomMainAdapter(Context context, String[] values) {
+    public CustomMainAdapter(Context context, ArrayList<String> values) {
         super(context, R.layout.row_layout, values);
         this.context = context;
         this.values = values;
@@ -30,7 +32,7 @@ public class CustomMainAdapter extends ArrayAdapter<String>{
         View rowView = inflater.inflate(R.layout.row_layout, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.label);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
-        textView.setText(values[position]);
+        textView.setText(values.get(position));
         Typeface roboto = Typeface.createFromAsset(context.getAssets(),"fonts/Roboto-Bold.ttf");
         textView.setTypeface(roboto);
 
