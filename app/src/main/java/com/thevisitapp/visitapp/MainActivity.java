@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,14 +28,12 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        new MainActivityAsync().execute();
 
 
-
-
-        new NoNameForNow().execute();
     }
 
-    private class NoNameForNow extends AsyncTask<String, Void, JSONObject>{
+    private class MainActivityAsync extends AsyncTask<String, Void, JSONObject>{
         protected JSONObject doInBackground(String...url){
 
             //TODO make this dynamic as it's passed in from other activity through intent
@@ -44,11 +45,15 @@ public class MainActivity extends ActionBarActivity {
                                                                     "13014";
 
             HttpRequest request = new HttpRequest();
-
-
             return request.getJSONFromUrl(MYURL);
+
+
         }
 
+
+
+
+        //parses through json and updates the UI with the result
         protected void onPostExecute(JSONObject result) {
             Log.d("JSONOBJECT RESPONSE", result.toString());
             ArrayList<String> modelNames = new ArrayList<String>();
@@ -71,13 +76,16 @@ public class MainActivity extends ActionBarActivity {
             CustomMainAdapter mainAdapter = new CustomMainAdapter(MainActivity.this, modelNames);
             mList.setAdapter(mainAdapter);
 
+
+            mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "List View row Clicked at"
+                                     + position, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
-        private ArrayList<ArrayList<String>> listPopulater(JSONObject json){
-
-
-            return null;
-        }
 
 
     }
@@ -85,7 +93,7 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
