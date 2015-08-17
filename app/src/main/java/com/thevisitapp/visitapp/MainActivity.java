@@ -69,7 +69,7 @@ public class MainActivity extends ActionBarActivity {
 
                 }
             } catch(JSONException e ){
-                Log.d("JSONEXCEPTION ", e.getMessage().toString());
+                Log.d("JSONEXCEPTION", e.getMessage().toString());
             }
 
             mList = (ListView) findViewById(android.R.id.list);
