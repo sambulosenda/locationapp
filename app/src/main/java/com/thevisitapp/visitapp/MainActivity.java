@@ -23,6 +23,7 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity {
 
     ListView mList;
+    JSONObject mJSONObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
         protected JSONObject doInBackground(String...url){
 
             //TODO make this dynamic as it's passed in from other activity through intent
-            String MYURL = " http://thevisitapp.com/api/series/read?identifiers=5096845609009152," +
+            String MYURL = " http://thevisitapp.com/api/destination/read?identifiers=5096845609009152," +
                                                                     "1027," +
                                                                     "5717648100818944," +
                                                                     "14030," +
@@ -55,8 +56,10 @@ public class MainActivity extends ActionBarActivity {
 
         //parses through json and updates the UI with the result
         protected void onPostExecute(JSONObject result) {
+            mJSONObject = result; //used in 'onItemClickListener'
             Log.d("JSONOBJECT RESPONSE", result.toString());
             ArrayList<String> modelNames = new ArrayList<String>();
+            JSONObject modelsObject = new JSONObject();
 
             try {
                 JSONObject info = result.getJSONObject("info");
@@ -64,17 +67,21 @@ public class MainActivity extends ActionBarActivity {
 
 
                 for(int i = 0; i < models.length(); i++){
-                    JSONObject modelsObject = models.getJSONObject(i);
+                    modelsObject = models.getJSONObject(i);
                     modelNames.add(modelsObject.getString("name").toString());
 
                 }
+
+
+
             } catch(JSONException e ){
-                Log.d("JSONEXCEPTION", e.getMessage().toString());
+                Log.d("JSONEXCEPTION", e.getMessage());
             }
 
             mList = (ListView) findViewById(android.R.id.list);
             CustomMainAdapter mainAdapter = new CustomMainAdapter(MainActivity.this, modelNames);
             mList.setAdapter(mainAdapter);
+            //getActionBar().setTitle(.toString());
 
 
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,6 +90,9 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(MainActivity.this, "List View row Clicked at"
                                      + position, Toast.LENGTH_SHORT).show();
                 }
+
+                Intent intent = new Intent();
+                //intent.putExtra("")
             });
         }
 
