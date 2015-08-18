@@ -35,6 +35,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    //calls destination
     private class CallDestination extends AsyncTask<String, Void, JSONObject>{
         protected JSONObject doInBackground(String...url){
 
@@ -79,6 +80,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    //calls destination series
     public class CallDestinationSeries extends AsyncTask<ArrayList<String>, Void, JSONObject>{
         protected JSONObject doInBackground(ArrayList<String>...series){
             String myUrl = " http://thevisitapp.com/api/series/read?identifiers=";
@@ -98,13 +100,26 @@ public class MainActivity extends ActionBarActivity {
             return  request.getJSONFromUrl(myUrl);
         }
 
-        protected void onPostExecute(JSONException result){
+        protected void onPostExecute(JSONObject result){
             ArrayList<String> modelNames = new ArrayList<String>();
+
+            try {
+                JSONObject info = result.getJSONObject("info");
+                JSONArray models = info.getJSONArray("models");
+
+
+                for(int i = 0; i < models.length(); i++){
+                    JSONObject modelsObject = models.getJSONObject(i);
+                    modelNames.add(modelsObject.getString("name").toString());
+
+                }
+            } catch(JSONException e ){
+                Log.d("JSONEXCEPTION", e.getMessage().toString());
+            }
 
             mList = (ListView) findViewById(android.R.id.list);
             CustomMainAdapter mainAdapter = new CustomMainAdapter(MainActivity.this, modelNames);
             mList.setAdapter(mainAdapter);
-
 
 
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
