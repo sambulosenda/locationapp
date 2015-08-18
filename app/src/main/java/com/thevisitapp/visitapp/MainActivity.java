@@ -1,5 +1,6 @@
 package com.thevisitapp.visitapp;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -29,26 +30,19 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new MainActivityAsync().execute();
+        new CallDestination().execute();
 
 
     }
 
-    private class MainActivityAsync extends AsyncTask<String, Void, JSONObject>{
+    private class CallDestination extends AsyncTask<String, Void, JSONObject>{
         protected JSONObject doInBackground(String...url){
 
             //TODO make this dynamic as it's passed in from other activity through intent
-            String MYURL = " http://thevisitapp.com/api/destination/read?identifiers=5096845609009152," +
-                                                                    "1027," +
-                                                                    "5717648100818944," +
-                                                                    "14030," +
-                                                                    "3028," +
-                                                                    "13014";
+            String MYURL = " http://thevisitapp.com/api/destinations/read?identifiers=10011";
 
             HttpRequest request = new HttpRequest();
             return request.getJSONFromUrl(MYURL);
-
-
         }
 
 
@@ -56,48 +50,74 @@ public class MainActivity extends ActionBarActivity {
 
         //parses through json and updates the UI with the result
         protected void onPostExecute(JSONObject result) {
-            mJSONObject = result; //used in 'onItemClickListener'
             Log.d("JSONOBJECT RESPONSE", result.toString());
-            ArrayList<String> modelNames = new ArrayList<String>();
-            JSONObject modelsObject = new JSONObject();
+            ArrayList<String> seriesList = new ArrayList<>();
+            JSONArray modelsArray;
+            JSONObject info;
+            JSONObject modelsData = new JSONObject();
+            JSONArray seriesJSONArray = new JSONArray();
+            JSONObject modelsObjects = new JSONObject();
 
-            try {
-                JSONObject info = result.getJSONObject("info");
-                JSONArray models = info.getJSONArray("models");
+            try{
+                info = result.getJSONObject("info");
+                modelsArray = info.getJSONArray("models");
+                Log.d("MODELS ARRAY", modelsArray.toString());
 
-
-                for(int i = 0; i < models.length(); i++){
-                    modelsObject = models.getJSONObject(i);
-                    modelNames.add(modelsObject.getString("name").toString());
-
-                }
-
-
-
+                modelsObjects = modelsArray.getJSONObject(0);
+                seriesJSONArray = modelsObjects.getJSONArray("series");
+               for(int i = 0; i < seriesJSONArray.length(); i++){
+                    seriesList.add(seriesJSONArray.get(i).toString());
+               }
             } catch(JSONException e ){
                 Log.d("JSONEXCEPTION", e.getMessage());
             }
 
+            new CallDestinationSeries().execute(seriesList);
+        }
+
+
+
+    }
+
+    public class CallDestinationSeries extends AsyncTask<ArrayList<String>, Void, JSONObject>{
+        protected JSONObject doInBackground(ArrayList<String>...series){
+            String myUrl = " http://thevisitapp.com/api/series/read?identifiers=";
+
+            ArrayList<String> urlSeries = series[0];
+
+            int count = 0;
+            for(int i = 0; i < urlSeries.size(); i++){
+                myUrl += urlSeries.get(i);
+                if(count != urlSeries.size() -1){
+                    myUrl += ",";
+                }
+                count++;
+            }
+            Log.d("MY FINAL URL", myUrl);
+            HttpRequest request = new HttpRequest();
+            return  request.getJSONFromUrl(myUrl);
+        }
+
+        protected void onPostExecute(JSONException result){
+            ArrayList<String> modelNames = new ArrayList<String>();
+
             mList = (ListView) findViewById(android.R.id.list);
             CustomMainAdapter mainAdapter = new CustomMainAdapter(MainActivity.this, modelNames);
             mList.setAdapter(mainAdapter);
-            //getActionBar().setTitle(.toString());
+
 
 
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "List View row Clicked at"
-                                     + position, Toast.LENGTH_SHORT).show();
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(MainActivity.this, "List View row Clicked at"
+                            + position, Toast.LENGTH_SHORT).show();
                 }
 
                 Intent intent = new Intent();
                 //intent.putExtra("")
             });
         }
-
-
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
