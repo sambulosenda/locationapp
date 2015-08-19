@@ -98,6 +98,7 @@ public class MainActivity extends ActionBarActivity {
                 count++;
             }
 
+            Log.d("MAIN URL", myUrl);
             HttpRequest request = new HttpRequest();
             return  request.getJSONFromUrl(myUrl);
         }
@@ -117,7 +118,6 @@ public class MainActivity extends ActionBarActivity {
                 for(int i = 0; i < modelsObjectList.size(); i++){
                     modelNames.add(modelsObjectList.get(i).getString("name"));
                 }
-
             } catch(JSONException e ){
                 Log.d("JSONEXCEPTION", e.getMessage().toString());
             }
@@ -135,6 +135,7 @@ public class MainActivity extends ActionBarActivity {
                             + position, Toast.LENGTH_SHORT).show();
 
                     JSONObject passingObject = modelsObjectList.get(position);
+                    Log.d("PASSING OBJECT", passingObject.toString());
                     ArrayList<String> nextSeriesList = new ArrayList<>();
                     ArrayList<String> nextPlacesList = new ArrayList<>();
 
@@ -146,7 +147,7 @@ public class MainActivity extends ActionBarActivity {
                         //populate list of series we will pass to next activity
                         for(int i = 0; i < series.length(); i++){
                             nextSeriesList.add(series.getString(i));
-                            Log.d("SERIES LIST ITEMS", series.getString(i));
+
                         }
                         for(int i = 0; i < places.length(); i++){
                             nextPlacesList.add(places.getString(i));
@@ -158,13 +159,13 @@ public class MainActivity extends ActionBarActivity {
                     } catch(JSONException e){
                         Log.d("JSONEXCEPTION", e.getMessage());
                     }
+                    Log.d("SERIES LIST ITEMS", mSeriesList.get(position));
                     Intent intent = new Intent(MainActivity.this, AfterDestinationActivity.class);
                     intent.putExtra("series", mSeriesList.get(position));
                     intent.putExtra("nextSeries", nextSeriesList);
                     intent.putExtra("nextPlaces", nextPlacesList);
                     intent.putExtra("name", name);
                     startActivity(intent);
-
                 }
             });
         }
