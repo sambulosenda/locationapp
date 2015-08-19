@@ -14,6 +14,11 @@ public class AfterDestinationActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_destination);
 
+        Bundle extras = getIntent().getExtras();
+        String seriesId = extras.getString("series");
+
+
+
 
     }
 

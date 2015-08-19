@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
-    ListView mList;
+    ListView mList; //this is the list that's going to be passed into the main adapter
     ArrayList<String> mSeriesList;
     JSONObject mJSONObject;
     @Override
@@ -57,14 +57,14 @@ public class MainActivity extends ActionBarActivity {
             JSONArray modelsArray;
             JSONObject info;
             JSONObject modelsData = new JSONObject();
-            JSONArray seriesJSONArray = new JSONArray();
-            JSONObject modelsObjects = new JSONObject();
+            JSONArray seriesJSONArray;
+            JSONObject modelsObjects; //snags "models" array objects in JSON response
 
             try{
                 info = result.getJSONObject("info");
                 modelsArray = info.getJSONArray("models");
                 Log.d("MODELS ARRAY", modelsArray.toString());
-                
+
                 modelsObjects = modelsArray.getJSONObject(0);
                 seriesJSONArray = modelsObjects.getJSONArray("series");
                for(int i = 0; i < seriesJSONArray.length(); i++){
@@ -103,17 +103,21 @@ public class MainActivity extends ActionBarActivity {
         }
 
         protected void onPostExecute(JSONObject result){
-            ArrayList<String> modelNames = new ArrayList<String>();
+            ArrayList<String> modelNames = new ArrayList<>();
+
+            final ArrayList<JSONObject> modelsObjectList = new ArrayList<>();
+            JSONObject getName;
 
             try {
                 JSONObject info = result.getJSONObject("info");
                 JSONArray models = info.getJSONArray("models");
-
+                getName = new JSONObject();
 
                 for(int i = 0; i < models.length(); i++){
-                    JSONObject modelsObject = models.getJSONObject(i);
-                    modelNames.add(modelsObject.getString("name").toString());
-
+                     modelsObjectList.add(models.getJSONObject(i));
+                }
+                for(int i = 0; i < modelsObjectList.size(); i++){
+                    modelNames.add(modelsObjectList.get(i).getString("name"));
                 }
 
             } catch(JSONException e ){
@@ -125,19 +129,37 @@ public class MainActivity extends ActionBarActivity {
             mList.setAdapter(mainAdapter);
 
 
-            mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+            mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                String name;
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(MainActivity.this, "List View row Clicked at"
                             + position, Toast.LENGTH_SHORT).show();
 
+                    JSONObject passingObject = modelsObjectList.get(position);
+                    ArrayList<String> nextSeriesList = new ArrayList<>();
+
+                    try {
+                        JSONArray series = passingObject.getJSONArray("series");
+
+                        //populate list of series we will pass to next activity
+                        for(int i = 0; i < series.length(); i++){
+                            nextSeriesList.add(series.getString(i));
+                            Log.d("SERIES LIST ITEMS", series.getString(i));
+                        }
+                        //get name that we will pass to next activity
+                        name = passingObject.getString("name");
+                        Log.d("NEXT ACTIVITY NAME", name);
+                    } catch(JSONException e){
+                        Log.d("JSONEXCEPTION", e.getMessage());
+                    }
                     Intent intent = new Intent(MainActivity.this, AfterDestinationActivity.class);
                     intent.putExtra("series", mSeriesList.get(position));
+                    intent.putExtra("nextSeries", nextSeriesList);
+                    intent.putExtra("name", name);
                     startActivity(intent);
 
                 }
-
-
             });
         }
     }
