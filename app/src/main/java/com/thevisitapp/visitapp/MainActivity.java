@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity {
 
     ListView mList;
+    ArrayList<String> mSeriesList;
     JSONObject mJSONObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class MainActivity extends ActionBarActivity {
         //parses through json and updates the UI with the result
         protected void onPostExecute(JSONObject result) {
             Log.d("JSONOBJECT RESPONSE", result.toString());
-            ArrayList<String> seriesList = new ArrayList<>();
+            mSeriesList = new ArrayList<>();
             JSONArray modelsArray;
             JSONObject info;
             JSONObject modelsData = new JSONObject();
@@ -63,17 +64,17 @@ public class MainActivity extends ActionBarActivity {
                 info = result.getJSONObject("info");
                 modelsArray = info.getJSONArray("models");
                 Log.d("MODELS ARRAY", modelsArray.toString());
-
+                
                 modelsObjects = modelsArray.getJSONObject(0);
                 seriesJSONArray = modelsObjects.getJSONArray("series");
                for(int i = 0; i < seriesJSONArray.length(); i++){
-                    seriesList.add(seriesJSONArray.get(i).toString());
+                    mSeriesList.add(seriesJSONArray.get(i).toString());
                }
             } catch(JSONException e ){
                 Log.d("JSONEXCEPTION", e.getMessage());
             }
 
-            new CallDestinationSeries().execute(seriesList);
+            new CallDestinationSeries().execute(mSeriesList);
         }
 
 
@@ -88,6 +89,7 @@ public class MainActivity extends ActionBarActivity {
             ArrayList<String> urlSeries = series[0];
 
             int count = 0;
+            //adds comma after every series but the last one
             for(int i = 0; i < urlSeries.size(); i++){
                 myUrl += urlSeries.get(i);
                 if(count != urlSeries.size() -1){
@@ -95,7 +97,7 @@ public class MainActivity extends ActionBarActivity {
                 }
                 count++;
             }
-            Log.d("MY FINAL URL", myUrl);
+
             HttpRequest request = new HttpRequest();
             return  request.getJSONFromUrl(myUrl);
         }
@@ -113,6 +115,7 @@ public class MainActivity extends ActionBarActivity {
                     modelNames.add(modelsObject.getString("name").toString());
 
                 }
+
             } catch(JSONException e ){
                 Log.d("JSONEXCEPTION", e.getMessage().toString());
             }
@@ -127,10 +130,14 @@ public class MainActivity extends ActionBarActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(MainActivity.this, "List View row Clicked at"
                             + position, Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(MainActivity.this, AfterDestinationActivity.class);
+                    intent.putExtra("series", mSeriesList.get(position));
+                    startActivity(intent);
+
                 }
 
-                Intent intent = new Intent();
-                //intent.putExtra("")
+
             });
         }
     }
