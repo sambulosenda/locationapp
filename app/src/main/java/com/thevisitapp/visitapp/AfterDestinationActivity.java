@@ -27,12 +27,14 @@ public class AfterDestinationActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_destination);
 
+
         ArrayList<String> seriesIds = new ArrayList<>();
         ArrayList<String> placesIds = new ArrayList<>();
         Bundle extras = getIntent().getExtras();
 
         seriesIds = extras.getStringArrayList("nextSeries");
         placesIds = extras.getStringArrayList("nextPlaces");
+
 
         String name = extras.getString("name");
 
@@ -46,9 +48,9 @@ public class AfterDestinationActivity extends ActionBarActivity {
     public class Series extends AsyncTask<ArrayList<String>, Void, JSONObject>{
         protected JSONObject doInBackground(ArrayList<String>...lists){
 
-            String myUrl = "http:/thevisitapp.com/api/series/read?identifiers=";
+            String myUrl = "http://thevisitapp.com/api/series/read?identifiers=";
             ArrayList<String> seriesIds = lists[0];
-            ArrayList<String> placesIds = lists[1];
+            Log.d("SERIES IDS IN AD", seriesIds.toString());
 
             int count = 0;
             //adds comma after every series but the last one
@@ -63,11 +65,13 @@ public class AfterDestinationActivity extends ActionBarActivity {
             Log.d("AD URL", myUrl);
             HttpRequest request = new HttpRequest();
 
+            Log.d("GETTING JSON FROM URL", request.getJSONFromUrl(myUrl).toString());
             return request.getJSONFromUrl(myUrl);
         }
 
         protected void onPostExecute(JSONObject result){
             ArrayList<String> modelNames = new ArrayList<>();
+            Log.d("JSON RESPONSE", result.toString());
 
             final ArrayList<JSONObject> modelsObjectList = new ArrayList<>();
 
@@ -86,6 +90,10 @@ public class AfterDestinationActivity extends ActionBarActivity {
                 Log.d("JSONEXCEPTION", e.getMessage().toString());
             }
 
+            //TODO found problem, model names for whatever reason is passing in the names from previous activity
+            Log.d("MODEL NAMES", modelNames.toString());
+            Toast.makeText(AfterDestinationActivity.this, modelNames.toString(), Toast.LENGTH_LONG).show();
+
             mList = (ListView) findViewById(android.R.id.list);
             CustomMainAdapter mainAdapter = new CustomMainAdapter(AfterDestinationActivity.this, modelNames);
             mList.setAdapter(mainAdapter);
@@ -95,8 +103,6 @@ public class AfterDestinationActivity extends ActionBarActivity {
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String name;
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(AfterDestinationActivity.this, "List View row Clicked at"
-                            + position, Toast.LENGTH_SHORT).show();
 
                     JSONObject passingObject = modelsObjectList.get(position);
                     ArrayList<String> nextSeriesList = new ArrayList<>();
@@ -112,23 +118,21 @@ public class AfterDestinationActivity extends ActionBarActivity {
                             nextSeriesList.add(series.getString(i));
 
                         }
-                        for(int i = 0; i < places.length(); i++){
-                            nextPlacesList.add(places.getString(i));
-                        }
 
                         //get name that we will pass to next activity
                         name = passingObject.getString("name");
                         Log.d("NEXT ACTIVITY NAME", name);
+                        Log.d("NEXT SERIES LIST", nextSeriesList.toString());
                     } catch(JSONException e){
                         Log.d("JSONEXCEPTION", e.getMessage());
                     }
 
-                    Intent intent = new Intent(AfterDestinationActivity.this, AfterDestinationActivity.class);
+//                    Intent intent = new Intent(AfterDestinationActivity.this, AfterDestinationActivity.class);
 //                    intent.putExtra("series", mSeriesList.get(position));
 //                    intent.putExtra("nextSeries", nextSeriesList);
 //                    intent.putExtra("nextPlaces", nextPlacesList);
 //                    intent.putExtra("name", name);
-                    startActivity(intent);
+//                    startActivity(intent);
                 }
             });
         }

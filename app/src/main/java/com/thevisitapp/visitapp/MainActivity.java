@@ -47,9 +47,6 @@ public class MainActivity extends ActionBarActivity {
             return request.getJSONFromUrl(MYURL);
         }
 
-
-
-
         //parses through json and updates the UI with the result
         protected void onPostExecute(JSONObject result) {
             Log.d("JSONOBJECT RESPONSE", result.toString());
@@ -141,18 +138,15 @@ public class MainActivity extends ActionBarActivity {
 
                     try {
                         JSONArray series = passingObject.getJSONArray("series");
-
-
                         //populate list of series we will pass to next activity
                         for(int i = 0; i < series.length(); i++){
                             nextSeriesList.add(series.getString(i));
 
                         }
-
-
                         //get name that we will pass to next activity
                         name = passingObject.getString("name");
                         Log.d("NEXT ACTIVITY NAME", name);
+                        Log.d("NEXT SERIES LIST", nextSeriesList.toString());
                     } catch(JSONException e){
                         Log.d("JSONEXCEPTION", e.getMessage());
                     }
