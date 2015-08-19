@@ -137,21 +137,18 @@ public class MainActivity extends ActionBarActivity {
                     JSONObject passingObject = modelsObjectList.get(position);
                     Log.d("PASSING OBJECT", passingObject.toString());
                     ArrayList<String> nextSeriesList = new ArrayList<>();
-                    ArrayList<String> nextPlacesList = new ArrayList<>();
 
 
                     try {
                         JSONArray series = passingObject.getJSONArray("series");
-                        JSONArray places = passingObject.getJSONArray("places");
+
 
                         //populate list of series we will pass to next activity
                         for(int i = 0; i < series.length(); i++){
                             nextSeriesList.add(series.getString(i));
 
                         }
-                        for(int i = 0; i < places.length(); i++){
-                            nextPlacesList.add(places.getString(i));
-                        }
+
 
                         //get name that we will pass to next activity
                         name = passingObject.getString("name");
@@ -163,7 +160,6 @@ public class MainActivity extends ActionBarActivity {
                     Intent intent = new Intent(MainActivity.this, AfterDestinationActivity.class);
                     intent.putExtra("series", mSeriesList.get(position));
                     intent.putExtra("nextSeries", nextSeriesList);
-                    intent.putExtra("nextPlaces", nextPlacesList);
                     intent.putExtra("name", name);
                     startActivity(intent);
                 }
