@@ -52,15 +52,7 @@ public class AfterDestinationActivity extends ActionBarActivity {
             ArrayList<String> seriesIds = lists[0];
             Log.d("SERIES IDS IN AD", seriesIds.toString());
 
-            int count = 0;
-            //adds comma after every series but the last one
-            for(int i = 0; i < seriesIds.size(); i++){
-                myUrl += seriesIds.get(i);
-                if(count != seriesIds.size() -1){
-                    myUrl += ",";
-                }
-                count++;
-            }
+            myUrl = formatUrl(myUrl, seriesIds);
 
             Log.d("AD URL", myUrl);
             HttpRequest request = new HttpRequest();
@@ -71,6 +63,7 @@ public class AfterDestinationActivity extends ActionBarActivity {
 
         protected void onPostExecute(JSONObject result){
             ArrayList<String> modelNames = new ArrayList<>();
+
             Log.d("JSON RESPONSE", result.toString());
 
             final ArrayList<JSONObject> modelsObjectList = new ArrayList<>();
@@ -82,8 +75,12 @@ public class AfterDestinationActivity extends ActionBarActivity {
                 for(int i = 0; i < models.length(); i++){
                     modelsObjectList.add(models.getJSONObject(i));
                 }
+
+
                 for(int i = 0; i < modelsObjectList.size(); i++){
                     modelNames.add(modelsObjectList.get(i).getString("name"));
+
+
                 }
 
             } catch(JSONException e ){
@@ -102,40 +99,53 @@ public class AfterDestinationActivity extends ActionBarActivity {
 
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String name;
+                Long id;
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     JSONObject passingObject = modelsObjectList.get(position);
-                    ArrayList<String> nextSeriesList = new ArrayList<>();
                     ArrayList<String> nextPlacesList = new ArrayList<>();
 
 
-                    try {
-                        JSONArray series = passingObject.getJSONArray("series");
-                        JSONArray places = passingObject.getJSONArray("places");
 
-                        //populate list of series we will pass to next activity
-                        for(int i = 0; i < series.length(); i++){
-                            nextSeriesList.add(series.getString(i));
+                    try {
+
+                        JSONArray places = passingObject.getJSONArray("places");
+                        for(int i = 0; i < places.length(); i++){
+                            nextPlacesList.add(places.getString(i));
 
                         }
-
-                        //get name that we will pass to next activity
+                        //get nam
                         name = passingObject.getString("name");
+                        id = passingObject.getLong("id");
                         Log.d("NEXT ACTIVITY NAME", name);
-                        Log.d("NEXT SERIES LIST", nextSeriesList.toString());
+                        System.out.println("NEXT ACTIVITY ID " + id);
+                        Log.d("NEXT SERIES LIST", nextPlacesList.toString());
+
                     } catch(JSONException e){
                         Log.d("JSONEXCEPTION", e.getMessage());
                     }
 
-//                    Intent intent = new Intent(AfterDestinationActivity.this, AfterDestinationActivity.class);
-//                    intent.putExtra("series", mSeriesList.get(position));
-//                    intent.putExtra("nextSeries", nextSeriesList);
-//                    intent.putExtra("nextPlaces", nextPlacesList);
-//                    intent.putExtra("name", name);
-//                    startActivity(intent);
+                    Intent intent = new Intent(AfterDestinationActivity.this, PlacesListActivity.class);
+                    intent.putExtra("id", id);
+                    intent.putExtra("name", name);
+                    intent.putExtra("placesList", nextPlacesList);
+                    startActivity(intent);
                 }
             });
         }
+    }
+
+    private String formatUrl(String myUrl, ArrayList<String> seriesIds) {
+        int count = 0;
+        //adds comma after every series but the last one
+        for(int i = 0; i < seriesIds.size(); i++){
+            myUrl += seriesIds.get(i);
+            if(count != seriesIds.size() -1){
+                myUrl += ",";
+            }
+            count++;
+        }
+        return myUrl;
     }
 
     @Override

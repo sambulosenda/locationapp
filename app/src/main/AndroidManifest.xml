@@ -26,6 +26,10 @@
             android:name=".AfterDestinationActivity"
             android:label="@string/title_activity_after_destination" >
         </activity>
+        <activity
+            android:name=".PlacesListActivity"
+            android:label="@string/title_activity_places_list" >
+        </activity>
     </application>
 
 </manifest>

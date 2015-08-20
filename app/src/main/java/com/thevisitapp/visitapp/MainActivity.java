@@ -85,15 +85,7 @@ public class MainActivity extends ActionBarActivity {
 
             ArrayList<String> urlSeries = series[0];
 
-            int count = 0;
-            //adds comma after every series but the last one
-            for(int i = 0; i < urlSeries.size(); i++){
-                myUrl += urlSeries.get(i);
-                if(count != urlSeries.size() -1){
-                    myUrl += ",";
-                }
-                count++;
-            }
+            myUrl = formatUrl(myUrl, urlSeries);
 
             Log.d("MAIN URL", myUrl);
             HttpRequest request = new HttpRequest();
@@ -136,8 +128,10 @@ public class MainActivity extends ActionBarActivity {
                     ArrayList<String> nextSeriesList = new ArrayList<>();
 
 
+
                     try {
                         JSONArray series = passingObject.getJSONArray("series");
+
                         //populate list of series we will pass to next activity
                         for(int i = 0; i < series.length(); i++){
                             nextSeriesList.add(series.getString(i));
@@ -160,6 +154,20 @@ public class MainActivity extends ActionBarActivity {
             });
         }
     }
+
+    private String formatUrl(String myUrl, ArrayList<String> urlSeries) {
+        int count = 0;
+        //adds comma after every series but the last one
+        for(int i = 0; i < urlSeries.size(); i++){
+            myUrl += urlSeries.get(i);
+            if(count != urlSeries.size() -1){
+                myUrl += ",";
+            }
+            count++;
+        }
+        return myUrl;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
