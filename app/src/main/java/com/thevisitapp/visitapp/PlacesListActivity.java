@@ -89,7 +89,16 @@ public class PlacesListActivity extends ActionBarActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     JSONObject nextObject = modelsObjectList.get(position);
-                    
+                    try {
+                        name = nextObject.getString("name");
+                    } catch(JSONException e ){
+                        Log.d("JSON EXCEPTION", e.getMessage());
+                    }
+                    Intent intent = new Intent(PlacesListActivity.this, PlaceActivity.class);
+                    intent.putExtra("id", id);
+                    intent.putExtra("name", name);
+
+                    startActivity(intent);
 
 
                     //setProgressBarIndeterminateVisibility(false);

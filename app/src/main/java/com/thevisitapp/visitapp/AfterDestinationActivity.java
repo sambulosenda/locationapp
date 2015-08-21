@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ public class AfterDestinationActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_destination);
 
@@ -61,6 +63,10 @@ public class AfterDestinationActivity extends ActionBarActivity {
             return request.getJSONFromUrl(myUrl);
         }
 
+        protected void onPreExecute(){
+            Toast.makeText(AfterDestinationActivity.this, "loading", Toast.LENGTH_LONG);
+            setProgressBarIndeterminateVisibility(true);
+        }
         protected void onPostExecute(JSONObject result){
             ArrayList<String> modelNames = new ArrayList<>();
 
@@ -96,7 +102,7 @@ public class AfterDestinationActivity extends ActionBarActivity {
             mList.setAdapter(mainAdapter);
 
 
-
+            setProgressBarIndeterminateVisibility(false);
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String name;
                 Long id;
@@ -130,6 +136,7 @@ public class AfterDestinationActivity extends ActionBarActivity {
                     intent.putExtra("name", name);
                     intent.putExtra("placesList", nextPlacesList);
                     startActivity(intent);
+
                 }
             });
         }

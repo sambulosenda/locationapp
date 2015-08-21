@@ -29,8 +29,8 @@ public class MainActivity extends ActionBarActivity {
     JSONObject mJSONObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
@@ -119,6 +119,7 @@ public class MainActivity extends ActionBarActivity {
             mList = (ListView) findViewById(android.R.id.list);
             CustomMainAdapter mainAdapter = new CustomMainAdapter(MainActivity.this, modelNames);
             mList.setAdapter(mainAdapter);
+            setProgressBarIndeterminateVisibility(false);
 
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String name;
@@ -150,7 +151,7 @@ public class MainActivity extends ActionBarActivity {
                     intent.putExtra("name", name);
                     startActivity(intent);
 
-                    setProgressBarIndeterminateVisibility(false);
+
                 }
             });
         }

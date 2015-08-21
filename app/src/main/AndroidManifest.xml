@@ -30,6 +30,10 @@
             android:name=".PlacesListActivity"
             android:label="@string/title_activity_places_list" >
         </activity>
+        <activity
+            android:name=".PlaceActivity"
+            android:label="@string/title_activity_place" >
+        </activity>
     </application>
 
 </manifest>
