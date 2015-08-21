@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 
 
 public class PlacesListActivity extends ActionBarActivity {
-    ArrayList<String> mSeriesList;
+
     ListView mList;
 
     @Override
@@ -25,7 +27,6 @@ public class PlacesListActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places_list);
 
-        ArrayList<String> seriesIds = new ArrayList<>();
         ArrayList<String> placesIds = new ArrayList<>();
         Bundle extras = getIntent().getExtras();
 
@@ -42,8 +43,8 @@ public class PlacesListActivity extends ActionBarActivity {
     private class Place extends AsyncTask<ArrayList<String>, Void, JSONObject>{
         protected JSONObject doInBackground(ArrayList<String>...places){
             String myUrl = "http://thevisitapp.com/api/places/read?identifiers=";
-            HttpRequest request = new HttpRequest();
 
+            HttpRequest request = new HttpRequest();
             ArrayList<String> placesList = places[0];
 
 
@@ -56,10 +57,10 @@ public class PlacesListActivity extends ActionBarActivity {
 
             Log.d("JSONOBJECT RESPONSE", result.toString());
             ArrayList<String> placesNames = new ArrayList<>();
+            final ArrayList<JSONObject> modelsObjectList = new ArrayList<>(); //snags "models" array objects in JSON response
+
             JSONArray modelsArray;
             JSONObject info;
-
-            ArrayList<String> modelsObjects = new ArrayList<>(); //snags "models" array objects in JSON response
 
             try{
                 info = result.getJSONObject("info");
@@ -67,57 +68,36 @@ public class PlacesListActivity extends ActionBarActivity {
                 Log.d("MODELS ARRAY", modelsArray.toString());
 
                 for(int i = 0; i < modelsArray.length(); i++){
-                    placesNames.add(modelsArray.getJSONObject(i).getString("name"));
+                    modelsObjectList.add(modelsArray.getJSONObject(i));
                 }
-                Log.d("MODELS OBJECTS", modelsObjects.toString());
+                for(int i = 0; i < modelsArray.length(); i++){
+                    placesNames.add(modelsObjectList.get(i).getString("name"));
+                }
+
+                Log.d("MODELS OBJECTS", modelsObjectList.toString());
             } catch(JSONException e ){
                 Log.d("JSONEXCEPTION", e.getMessage());
             }
 
+
             mList = (ListView) findViewById(android.R.id.list);
             CustomMainAdapter mainAdapter = new CustomMainAdapter(PlacesListActivity.this, placesNames);
             mList.setAdapter(mainAdapter);
+
+            mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                String name;
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    JSONObject nextObject = modelsObjectList.get(position);
+                    
+
+
+                    //setProgressBarIndeterminateVisibility(false);
+                }
+            });
         }
     }
 
-//    private class PopulatePlaces extends AsyncTask<ArrayList<String>, Void, JSONObject>{
-//        protected JSONObject doInBackground(ArrayList<String>...seriesList){
-//            String myUrl = "http://thevisitapp.com/api/series/read?identifiers=";
-//
-//            ArrayList<String> urlSeries = seriesList[0];
-//            myUrl = formatUrl(myUrl, urlSeries);
-//
-//            HttpRequest request = new HttpRequest();
-//            return request.getJSONFromUrl(myUrl);
-//        }
-//
-//        protected void onPostExecute(JSONObject result){
-//            ArrayList<String> modelNames = new ArrayList<>();
-//
-//            final ArrayList<JSONObject> modelsObjectList = new ArrayList<>();
-//
-//            try {
-//                JSONObject info = result.getJSONObject("info");
-//                JSONArray models = info.getJSONArray("models");
-//                Log.d("MODELS BEFORE NAMES", models.toString());
-//                for(int i = 0; i < models.length(); i++){
-//                    modelsObjectList.add(models.getJSONObject(i));
-//                }
-//                for(int i = 0; i < modelsObjectList.size(); i++){
-//                    modelNames.add(modelsObjectList.get(i).getString("name"));
-//                }
-//
-//                Log.d("MODEL NAMES", modelNames.toString());
-//            } catch(JSONException e ){
-//                Log.d("JSONEXCEPTION", e.getMessage().toString());
-//            }
-//
-//            mList = (ListView) findViewById(android.R.id.list);
-//            CustomMainAdapter mainAdapter = new CustomMainAdapter(PlacesListActivity.this, modelNames);
-//            mList.setAdapter(mainAdapter);
-//
-//        }
-//    }
 
     private String formatUrl(String myUrl, ArrayList<String> urlSeries) {
         int count = 0;
@@ -136,15 +116,6 @@ public class PlacesListActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_places_list, menu);
-
-
-        Bundle extras = getIntent().getExtras();
-        String name = extras.getString("name");
-        Long id = extras.getLong("id");
-
-        getSupportActionBar().setTitle(name);
-
-
         return true;
     }
 

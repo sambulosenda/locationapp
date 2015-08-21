@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -29,10 +30,11 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
-        new CallDestination().execute();
 
+        new CallDestination().execute();
 
     }
 
@@ -47,13 +49,16 @@ public class MainActivity extends ActionBarActivity {
             return request.getJSONFromUrl(MYURL);
         }
 
+        protected void onPreExecute(){
+            setProgressBarIndeterminateVisibility(true);
+        }
         //parses through json and updates the UI with the result
         protected void onPostExecute(JSONObject result) {
             Log.d("JSONOBJECT RESPONSE", result.toString());
             mSeriesList = new ArrayList<>();
             JSONArray modelsArray;
             JSONObject info;
-            JSONObject modelsData = new JSONObject();
+
             JSONArray seriesJSONArray;
             JSONObject modelsObjects; //snags "models" array objects in JSON response
 
@@ -115,19 +120,13 @@ public class MainActivity extends ActionBarActivity {
             CustomMainAdapter mainAdapter = new CustomMainAdapter(MainActivity.this, modelNames);
             mList.setAdapter(mainAdapter);
 
-
-
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String name;
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(MainActivity.this, "List View row Clicked at"
-                            + position, Toast.LENGTH_SHORT).show();
 
                     JSONObject passingObject = modelsObjectList.get(position);
                     Log.d("PASSING OBJECT", passingObject.toString());
                     ArrayList<String> nextSeriesList = new ArrayList<>();
-
-
 
                     try {
                         JSONArray series = passingObject.getJSONArray("series");
@@ -150,6 +149,8 @@ public class MainActivity extends ActionBarActivity {
                     intent.putExtra("nextSeries", nextSeriesList);
                     intent.putExtra("name", name);
                     startActivity(intent);
+
+                    setProgressBarIndeterminateVisibility(false);
                 }
             });
         }
