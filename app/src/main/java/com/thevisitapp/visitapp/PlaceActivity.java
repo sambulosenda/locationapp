@@ -16,7 +16,7 @@ public class PlaceActivity extends ActionBarActivity {
 
         Bundle extras = getIntent().getExtras();
         String name = extras.getString("name");
-        Long id = extras.getLong("id");
+        
         getSupportActionBar().setTitle(name);
     }
 
