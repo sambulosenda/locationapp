@@ -34,7 +34,10 @@ public class PlacesListActivity extends ActionBarActivity {
         String name = extras.getString("name");
         placesIds = extras.getStringArrayList("placesList");
 
+
         getSupportActionBar().setTitle(name);
+        //TODO certain places don't get passed in i.e. fast food
+        Log.d("PLACESLISTNAME", name);
 
         Place place = new Place();
         place.execute(placesIds);

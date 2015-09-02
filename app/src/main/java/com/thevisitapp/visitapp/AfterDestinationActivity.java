@@ -39,7 +39,7 @@ public class AfterDestinationActivity extends ActionBarActivity {
 
 
         String name = extras.getString("name");
-
+        Log.d("ADACTIVITY NAME", name);
 
         getSupportActionBar().setTitle(name);
 
