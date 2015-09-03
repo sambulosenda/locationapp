@@ -144,7 +144,7 @@ public class MainActivity extends ActionBarActivity {
                     } catch(JSONException e){
                         Log.d("JSONEXCEPTION", e.getMessage());
                     }
-                    Log.d("SERIES LIST ITEMS", mSeriesList.get(position));
+                    Log.d("MAINACTIVITY SERIES LIST ITEMS", mSeriesList.get(position));
                     Intent intent = new Intent(MainActivity.this, AfterDestinationActivity.class);
                     intent.putExtra("series", mSeriesList.get(position));
                     intent.putExtra("nextSeries", nextSeriesList);

@@ -97,7 +97,7 @@ public class PlacesListActivity extends ActionBarActivity {
                     } catch(JSONException e ){
                         Log.d("JSON EXCEPTION", e.getMessage());
                     }
-                    Intent intent = new Intent(PlacesListActivity.this, PlaceActivity.class);
+                    Intent intent = new Intent(PlacesListActivity.this, PlacesActivity.class);
                     intent.putExtra("id", id);
                     intent.putExtra("name", name);
 
