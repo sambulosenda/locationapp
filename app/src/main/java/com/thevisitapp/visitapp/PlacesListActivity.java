@@ -89,17 +89,31 @@ public class PlacesListActivity extends ActionBarActivity {
 
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String name;
+
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    JSONObject nextObject = modelsObjectList.get(position);
+                    JSONObject nextActivityObject = modelsObjectList.get(position);
+                    ArrayList<JSONObject> nextActivityMapLocationsObject = new ArrayList<>();
+
                     try {
-                        name = nextObject.getString("name");
+                        JSONArray nextActivityMapLocations = nextActivityObject.getJSONArray("locations");
+
+                        name = nextActivityObject.getString("name");
+
+                        for(int i = 0; i < nextActivityMapLocations.length(); i++){
+                            nextActivityMapLocationsObject.add(nextActivityMapLocations.getJSONObject(i));
+                        }
+
+                        //TODO figure out how to pass JSON Object with potential lat and longs
+
+
                     } catch(JSONException e ){
                         Log.d("JSON EXCEPTION", e.getMessage());
                     }
                     Intent intent = new Intent(PlacesListActivity.this, PlacesActivity.class);
                     intent.putExtra("id", id);
                     intent.putExtra("name", name);
+                    intent.putExtra("locationObject", nextActivityMapLocationsObject);
 
                     startActivity(intent);
 

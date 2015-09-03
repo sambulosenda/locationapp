@@ -10,9 +10,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class PlacesActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    ArrayList<JSONObject> mMapLocationsList = new ArrayList<JSONObject>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +27,8 @@ public class PlacesActivity extends FragmentActivity implements OnMapReadyCallba
 
         Bundle extras = getIntent().getExtras();
         String name = extras.getString("name");
+
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
