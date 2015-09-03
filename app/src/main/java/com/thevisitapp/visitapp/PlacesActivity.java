@@ -17,8 +17,9 @@ import java.util.ArrayList;
 public class PlacesActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    ArrayList<JSONObject> mMapLocationsList = new ArrayList<JSONObject>();
-
+    ArrayList<String> mMapLocationsList = new ArrayList<>();
+    String mName;
+    String mZoom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +27,9 @@ public class PlacesActivity extends FragmentActivity implements OnMapReadyCallba
         setUpMapIfNeeded();
 
         Bundle extras = getIntent().getExtras();
-        String name = extras.getString("name");
-
+        mName = extras.getString("name");
+        mMapLocationsList = extras.getStringArrayList("locationList");
+        mZoom = extras.getString("zoom");
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -39,9 +41,12 @@ public class PlacesActivity extends FragmentActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap map) {
         // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng sydney = new LatLng(Double.parseDouble(mMapLocationsList.get(0)),
+                Double.parseDouble(mMapLocationsList.get(1)));
+
+        map.addMarker(new MarkerOptions().position(sydney).title("Marker in " + mName));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, Long.parseLong(mZoom)));
+
     }
 
     @Override

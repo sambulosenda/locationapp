@@ -89,11 +89,12 @@ public class PlacesListActivity extends ActionBarActivity {
 
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String name;
+                String zoom;
 
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     JSONObject nextActivityObject = modelsObjectList.get(position);
-                    ArrayList<JSONObject> nextActivityMapLocationsObject = new ArrayList<>();
+                    ArrayList<String> listOfLatLng = new ArrayList<>();
 
                     try {
                         JSONArray nextActivityMapLocations = nextActivityObject.getJSONArray("locations");
@@ -101,7 +102,9 @@ public class PlacesListActivity extends ActionBarActivity {
                         name = nextActivityObject.getString("name");
 
                         for(int i = 0; i < nextActivityMapLocations.length(); i++){
-                            nextActivityMapLocationsObject.add(nextActivityMapLocations.getJSONObject(i));
+                            listOfLatLng.add((nextActivityMapLocations.getJSONObject(i).getString("latitude")));
+                            listOfLatLng.add((nextActivityMapLocations.getJSONObject(i).getString("longitude")));
+                            zoom = nextActivityMapLocations.getJSONObject(i).getString("zoom");
                         }
 
                         //TODO figure out how to pass JSON Object with potential lat and longs
@@ -113,7 +116,8 @@ public class PlacesListActivity extends ActionBarActivity {
                     Intent intent = new Intent(PlacesListActivity.this, PlacesActivity.class);
                     intent.putExtra("id", id);
                     intent.putExtra("name", name);
-                    intent.putExtra("locationObject", nextActivityMapLocationsObject);
+                    intent.putExtra("zoom", zoom);
+                    intent.putExtra("locationList", listOfLatLng);
 
                     startActivity(intent);
 
