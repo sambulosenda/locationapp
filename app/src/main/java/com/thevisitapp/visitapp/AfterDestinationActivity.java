@@ -30,12 +30,12 @@ public class AfterDestinationActivity extends ActionBarActivity {
         setContentView(R.layout.activity_after_destination);
 
 
-        ArrayList<String> seriesIds = new ArrayList<>();
-        ArrayList<String> placesIds = new ArrayList<>();
+        ArrayList<String> seriesIds;
+        ArrayList<String> placesIds;
         Bundle extras = getIntent().getExtras();
 
         seriesIds = extras.getStringArrayList("nextSeries");
-        placesIds = extras.getStringArrayList("nextPlaces");
+
 
 
         String name = extras.getString("name");
@@ -43,8 +43,11 @@ public class AfterDestinationActivity extends ActionBarActivity {
 
         getSupportActionBar().setTitle(name);
 
+        for(int i = 0; i < seriesIds.size(); i++){
+            Log.d("SERIES IN ADA LIST", seriesIds.get(i).toString());
+        }
 
-        new Series().execute(seriesIds, placesIds);
+        new Series().execute(seriesIds);
     }
 
     public class Series extends AsyncTask<ArrayList<String>, Void, JSONObject>{
@@ -110,9 +113,9 @@ public class AfterDestinationActivity extends ActionBarActivity {
 
                     JSONObject passingObject = modelsObjectList.get(position);
                     ArrayList<String> nextPlacesList = new ArrayList<>();
+                    Log.d("AD OBJECT PRESSED ON", passingObject.toString());
 
-
-
+                    //TODO found issues with debugging
                     try {
 
                         JSONArray places = passingObject.getJSONArray("places");

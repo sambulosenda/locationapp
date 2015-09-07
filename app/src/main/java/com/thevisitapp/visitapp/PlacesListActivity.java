@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,9 +36,9 @@ public class PlacesListActivity extends ActionBarActivity {
         placesIds = extras.getStringArrayList("placesList");
 
 
-        getSupportActionBar().setTitle(name);
+        //getSupportActionBar().setTitle(name);
         //TODO certain places don't get passed in i.e. fast food
-        Log.d("PLACESLISTNAME", name);
+        //Log.d("PLACESLISTNAME", name);
 
         Place place = new Place();
         place.execute(placesIds);
@@ -47,12 +48,14 @@ public class PlacesListActivity extends ActionBarActivity {
         protected JSONObject doInBackground(ArrayList<String>...places){
             String myUrl = "http://thevisitapp.com/api/places/read?identifiers=";
 
+
             HttpRequest request = new HttpRequest();
             ArrayList<String> placesList = places[0];
 
 
             myUrl = formatUrl(myUrl, placesList);
             Log.d("PLACES ID", myUrl);
+            Log.d("RETURL URL", request.getJSONFromUrl(myUrl).toString());
             return request.getJSONFromUrl(myUrl);
         }
 
@@ -131,13 +134,18 @@ public class PlacesListActivity extends ActionBarActivity {
 
     private String formatUrl(String myUrl, ArrayList<String> urlSeries) {
         int count = 0;
+
         //adds comma after every series but the last one
-        for(int i = 0; i < urlSeries.size(); i++){
-            myUrl += urlSeries.get(i);
-            if(count != urlSeries.size() -1){
-                myUrl += ",";
+        if (!urlSeries.isEmpty()){
+            for (int i = 0; i < urlSeries.size(); i++) {
+                myUrl += urlSeries.get(i);
+                if (count != urlSeries.size() - 1) {
+                    myUrl += ",";
+                }
+                count++;
             }
-            count++;
+        } else{
+            Log.d("SERIES ERROR", "SERIES LIST IS EMPTY");
         }
         return myUrl;
     }
