@@ -118,22 +118,23 @@ public class AfterDestinationActivity extends ActionBarActivity {
                     //TODO found issues with debugging
                     try {
 
-                        JSONArray places = passingObject.getJSONArray("places");
+                        JSONArray places;
                         JSONArray series = passingObject.getJSONArray("series");
-                        Log.d("AD PLACES", places.toString());
 
                         //if there are no places, launch http request again for series
-                        if(places.getString(0) == null){
+                        if(passingObject.optJSONArray("places") == null){
                             ArrayList<String> sameSeries = new ArrayList();
+                            System.out.println("WENT INTO FOR LOOP");
                             for(int i = 0; i < series.length(); i++){
                                 sameSeries.add(series.getString(i));
+                                Log.d("AD FOR LOOP SERIES", series.getString(i));
                             }
                             new Series().execute(sameSeries);
                         }
-                        for(int i = 0; i < places.length(); i++){
-                            nextPlacesList.add(places.getString(i));
-
-                        }
+//                        for(int i = 0; i < places.length(); i++){
+//                            nextPlacesList.add(places.getString(i));
+//
+//                        }
                         //get nam
                         name = passingObject.getString("name");
                         id = passingObject.getLong("id");
@@ -142,7 +143,7 @@ public class AfterDestinationActivity extends ActionBarActivity {
                         Log.d("NEXT SERIES LIST", nextPlacesList.toString());
 
                     } catch(JSONException e){
-                        Log.d("JSONEXCEPTION", e.getMessage());
+                        Log.d("JSONEXCEPTION", "IN THERE " + e.getMessage());
                     }
 
                     Intent intent = new Intent(AfterDestinationActivity.this, PlacesListActivity.class);
