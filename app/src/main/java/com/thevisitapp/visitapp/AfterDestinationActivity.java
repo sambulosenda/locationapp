@@ -119,6 +119,17 @@ public class AfterDestinationActivity extends ActionBarActivity {
                     try {
 
                         JSONArray places = passingObject.getJSONArray("places");
+                        JSONArray series = passingObject.getJSONArray("series");
+                        Log.d("AD PLACES", places.toString());
+
+                        //if there are no places, launch http request again for series
+                        if(places.getString(0) == null){
+                            ArrayList<String> sameSeries = new ArrayList();
+                            for(int i = 0; i < series.length(); i++){
+                                sameSeries.add(series.getString(i));
+                            }
+                            new Series().execute(sameSeries);
+                        }
                         for(int i = 0; i < places.length(); i++){
                             nextPlacesList.add(places.getString(i));
 
