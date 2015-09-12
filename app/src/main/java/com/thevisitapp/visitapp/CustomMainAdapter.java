@@ -20,7 +20,11 @@ public class CustomMainAdapter extends ArrayAdapter<String>{
     private final ArrayList<String> values;
 
     public CustomMainAdapter(Context context, ArrayList<String> values) {
+
         super(context, R.layout.row_layout, values);
+        for(int i = 0; i < values.size(); i++){
+            System.out.println("PRINTING OUT VALUES " + values.get(i));
+        }
         this.context = context;
         this.values = values;
     }
