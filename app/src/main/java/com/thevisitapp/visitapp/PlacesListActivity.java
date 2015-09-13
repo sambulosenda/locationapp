@@ -63,6 +63,7 @@ public class PlacesListActivity extends ActionBarActivity {
 
             Log.d("JSONOBJECT RESPONSE", result.toString());
             ArrayList<String> placesNames = new ArrayList<>();
+            ArrayList<String> summaries = new ArrayList<>();
             final ArrayList<JSONObject> modelsObjectList = new ArrayList<>(); //snags "models" array objects in JSON response
 
             JSONArray modelsArray;
@@ -75,10 +76,10 @@ public class PlacesListActivity extends ActionBarActivity {
 
                 for(int i = 0; i < modelsArray.length(); i++){
                     modelsObjectList.add(modelsArray.getJSONObject(i));
-                }
-                for(int i = 0; i < modelsArray.length(); i++){
                     placesNames.add(modelsObjectList.get(i).getString("name"));
+                    summaries.add(modelsObjectList.get(i).getString("summary"));
                 }
+
 
                 Log.d("MODELS OBJECTS", modelsObjectList.toString());
             } catch(JSONException e ){
@@ -87,7 +88,7 @@ public class PlacesListActivity extends ActionBarActivity {
 
 
             mList = (ListView) findViewById(android.R.id.list);
-            CustomMainAdapter mainAdapter = new CustomMainAdapter(PlacesListActivity.this, placesNames);
+            PlacesListAdapter mainAdapter = new PlacesListAdapter(PlacesListActivity.this, placesNames, summaries);
             mList.setAdapter(mainAdapter);
 
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -127,8 +128,6 @@ public class PlacesListActivity extends ActionBarActivity {
 
                     startActivity(intent);
 
-
-                    //setProgressBarIndeterminateVisibility(false);
                 }
             });
         }
