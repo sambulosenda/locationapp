@@ -2,6 +2,7 @@ package com.thevisitapp.visitapp;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +19,7 @@ public class PlacesActivity extends FragmentActivity implements OnMapReadyCallba
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     ArrayList<String> mMapLocationsList = new ArrayList<>();
+    String mSummary;
     String mName;
     String mZoom;
     @Override
@@ -26,11 +28,15 @@ public class PlacesActivity extends FragmentActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_place);
         setUpMapIfNeeded();
 
+        TextView summary = (TextView) findViewById(R.id.summary);
+
         Bundle extras = getIntent().getExtras();
         mName = extras.getString("name");
         mMapLocationsList = extras.getStringArrayList("locationList");
         mZoom = extras.getString("zoom");
+        mSummary = extras.getString("summary");
 
+        summary.setText(mSummary);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

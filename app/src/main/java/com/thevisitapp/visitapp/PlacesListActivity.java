@@ -55,7 +55,7 @@ public class PlacesListActivity extends ActionBarActivity {
 
             myUrl = formatUrl(myUrl, placesList);
             Log.d("PLACES ID", myUrl);
-            Log.d("RETURL URL", request.getJSONFromUrl(myUrl).toString());
+            Log.d("PLACES LIST URL", request.getJSONFromUrl(myUrl).toString());
             return request.getJSONFromUrl(myUrl);
         }
 
@@ -93,6 +93,7 @@ public class PlacesListActivity extends ActionBarActivity {
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String name;
                 String zoom;
+                String summary;
 
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -103,6 +104,7 @@ public class PlacesListActivity extends ActionBarActivity {
                         JSONArray nextActivityMapLocations = nextActivityObject.getJSONArray("locations");
 
                         name = nextActivityObject.getString("name");
+                        summary = nextActivityObject.getString("summary");
 
                         for(int i = 0; i < nextActivityMapLocations.length(); i++){
                             listOfLatLng.add((nextActivityMapLocations.getJSONObject(i).getString("latitude")));
@@ -120,6 +122,7 @@ public class PlacesListActivity extends ActionBarActivity {
                     intent.putExtra("id", id);
                     intent.putExtra("name", name);
                     intent.putExtra("zoom", zoom);
+                    intent.putExtra("summary", summary);
                     intent.putExtra("locationList", listOfLatLng);
 
                     startActivity(intent);

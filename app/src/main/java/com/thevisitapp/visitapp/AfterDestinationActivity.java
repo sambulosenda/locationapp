@@ -30,12 +30,12 @@ public class AfterDestinationActivity extends ActionBarActivity {
         setContentView(R.layout.activity_after_destination);
 
 
-        ArrayList<String> seriesIds;
-        ArrayList<String> placesIds;
+        ArrayList<String> seriesIds = new ArrayList<>();
+        ArrayList<String> placesIds = new ArrayList<>();
         Bundle extras = getIntent().getExtras();
 
         seriesIds = extras.getStringArrayList("nextSeries");
-
+        placesIds = extras.getStringArrayList("nextPlaces");
 
 
         String name = extras.getString("name");
@@ -43,11 +43,8 @@ public class AfterDestinationActivity extends ActionBarActivity {
 
         getSupportActionBar().setTitle(name);
 
-        for(int i = 0; i < seriesIds.size(); i++){
-            Log.d("SERIES IN ADA LIST", seriesIds.get(i).toString());
-        }
 
-        new Series().execute(seriesIds);
+        new Series().execute(seriesIds, placesIds);
     }
 
     public class Series extends AsyncTask<ArrayList<String>, Void, JSONObject>{
@@ -113,28 +110,16 @@ public class AfterDestinationActivity extends ActionBarActivity {
 
                     JSONObject passingObject = modelsObjectList.get(position);
                     ArrayList<String> nextPlacesList = new ArrayList<>();
-                    Log.d("AD OBJECT PRESSED ON", passingObject.toString());
 
-                    //TODO found issues with debugging
+
+
                     try {
 
-                        JSONArray places;
-                        JSONArray series = passingObject.getJSONArray("series");
+                        JSONArray places = passingObject.getJSONArray("places");
+                        for(int i = 0; i < places.length(); i++){
+                            nextPlacesList.add(places.getString(i));
 
-                        //if there are no places, launch http request again for series
-                        if(passingObject.optJSONArray("places") == null){
-                            ArrayList<String> sameSeries = new ArrayList();
-                            System.out.println("WENT INTO FOR LOOP");
-                            for(int i = 0; i < series.length(); i++){
-                                sameSeries.add(series.getString(i));
-                                Log.d("AD FOR LOOP SERIES", series.getString(i));
-                            }
-                            new Series().execute(sameSeries);
                         }
-//                        for(int i = 0; i < places.length(); i++){
-//                            nextPlacesList.add(places.getString(i));
-//
-//                        }
                         //get nam
                         name = passingObject.getString("name");
                         id = passingObject.getLong("id");
@@ -143,7 +128,7 @@ public class AfterDestinationActivity extends ActionBarActivity {
                         Log.d("NEXT SERIES LIST", nextPlacesList.toString());
 
                     } catch(JSONException e){
-                        Log.d("JSONEXCEPTION", "IN THERE " + e.getMessage());
+                        Log.d("JSONEXCEPTION", e.getMessage());
                     }
 
                     Intent intent = new Intent(AfterDestinationActivity.this, PlacesListActivity.class);
