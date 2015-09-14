@@ -1,7 +1,5 @@
 package com.thevisitapp.visitapp;
 
-import android.app.ActionBar;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -145,7 +142,7 @@ public class MainActivity extends ActionBarActivity {
                         Log.d("JSONEXCEPTION", e.getMessage());
                     }
                     Log.d("MAINACTIVITY SERIES LIST ITEMS", mSeriesList.get(position));
-                    Intent intent = new Intent(MainActivity.this, AfterDestinationActivity.class);
+                    Intent intent = new Intent(MainActivity.this, SeriesActivity.class);
                     intent.putExtra("series", mSeriesList.get(position));
                     intent.putExtra("nextSeries", nextSeriesList);
                     intent.putExtra("name", name);

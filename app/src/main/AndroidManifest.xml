@@ -32,7 +32,7 @@
             android:label="@string/title_activity_search" >
         </activity>
         <activity
-            android:name=".AfterDestinationActivity"
+            android:name=".SeriesActivity"
             android:label="@string/title_activity_after_destination" >
         </activity>
         <activity
@@ -53,6 +53,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.thevisitapp.visitapp.PlacesListActivity" />
+        </activity>
+        <activity
+            android:name=".SecondSeriesActivity"
+            android:label="@string/title_activity_second_series" >
         </activity>
     </application>
 

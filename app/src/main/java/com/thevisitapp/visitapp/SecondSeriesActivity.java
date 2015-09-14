@@ -20,7 +20,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class AfterDestinationActivity extends ActionBarActivity {
+public class SecondSeriesActivity extends ActionBarActivity {
+
     ListView mList;
 
     @Override
@@ -30,29 +31,29 @@ public class AfterDestinationActivity extends ActionBarActivity {
         setContentView(R.layout.activity_after_destination);
 
 
-        ArrayList<String> seriesIds = new ArrayList<>();
-        ArrayList<String> placesIds = new ArrayList<>();
+        ArrayList<String> seriesIds;
+
         Bundle extras = getIntent().getExtras();
 
         seriesIds = extras.getStringArrayList("nextSeries");
-        placesIds = extras.getStringArrayList("nextPlaces");
+
 
 
         String name = extras.getString("name");
-        Log.d("ADACTIVITY NAME", name);
+        Log.d("SECOND SERIES", name);
 
         getSupportActionBar().setTitle(name);
 
-
-        new Series().execute(seriesIds, placesIds);
+        Toast.makeText(this, "actually correct activity", Toast.LENGTH_LONG).show();
+        new Series().execute(seriesIds);
     }
 
-    public class Series extends AsyncTask<ArrayList<String>, Void, JSONObject>{
+    public class Series extends AsyncTask<ArrayList<String>, Void, JSONObject> {
         protected JSONObject doInBackground(ArrayList<String>...lists){
 
             String myUrl = "http://thevisitapp.com/api/series/read?identifiers=";
             ArrayList<String> seriesIds = lists[0];
-            Log.d("SERIES IDS IN AD", seriesIds.toString());
+            Log.d("SERIES IDS IN SECOND", seriesIds.toString());
 
             myUrl = formatUrl(myUrl, seriesIds);
 
@@ -63,10 +64,6 @@ public class AfterDestinationActivity extends ActionBarActivity {
             return request.getJSONFromUrl(myUrl);
         }
 
-        protected void onPreExecute(){
-            Toast.makeText(AfterDestinationActivity.this, "loading", Toast.LENGTH_LONG);
-            setProgressBarIndeterminateVisibility(true);
-        }
         protected void onPostExecute(JSONObject result){
             ArrayList<String> modelNames = new ArrayList<>();
 
@@ -75,30 +72,31 @@ public class AfterDestinationActivity extends ActionBarActivity {
             final ArrayList<JSONObject> modelsObjectList = new ArrayList<>();
 
             try {
+
                 JSONObject info = result.getJSONObject("info");
                 JSONArray models = info.getJSONArray("models");
 
+                Log.d("SECOND MODELS", models.toString());
                 for(int i = 0; i < models.length(); i++){
                     modelsObjectList.add(models.getJSONObject(i));
+                    Log.d("MODELS OBJECT", models.getJSONObject(i).toString());
+
                 }
-
-
+                Log.d("MODELS OBJECT LIST", modelsObjectList.toString());
                 for(int i = 0; i < modelsObjectList.size(); i++){
                     modelNames.add(modelsObjectList.get(i).getString("name"));
-
-
+                    System.out.println("NAMES " + modelNames.get(i));
                 }
-
             } catch(JSONException e ){
                 Log.d("JSONEXCEPTION", e.getMessage().toString());
             }
 
-            //TODO found problem, model names for whatever reason is passing in the names from previous activity
+
             Log.d("MODEL NAMES", modelNames.toString());
-            Toast.makeText(AfterDestinationActivity.this, modelNames.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(SecondSeriesActivity.this, modelNames.toString(), Toast.LENGTH_LONG).show();
 
             mList = (ListView) findViewById(android.R.id.list);
-            CustomMainAdapter mainAdapter = new CustomMainAdapter(AfterDestinationActivity.this, modelNames);
+            CustomMainAdapter mainAdapter = new CustomMainAdapter(SecondSeriesActivity.this, modelNames);
             mList.setAdapter(mainAdapter);
 
 
@@ -115,12 +113,27 @@ public class AfterDestinationActivity extends ActionBarActivity {
 
                     try {
 
+
+                        if(passingObject.optJSONArray("places") == null){
+                            name = passingObject.getString("name");
+                            id = passingObject.getLong("id");
+                            Log.d("NEXT ACTIVITY NAME", name);
+                            System.out.println("NEXT ACTIVITY ID " + id);
+                            Log.d("NEXT SERIES LIST", nextPlacesList.toString());
+
+                            Intent intent = new Intent(SecondSeriesActivity.this, SecondSeriesActivity.class);
+                            intent.putExtra("id", id);
+                            intent.putExtra("name", name);
+                            intent.putExtra("placesList", nextPlacesList);
+                            startActivity(intent);
+                        }
+
                         JSONArray places = passingObject.getJSONArray("places");
                         for(int i = 0; i < places.length(); i++){
                             nextPlacesList.add(places.getString(i));
 
                         }
-                        //get nam
+
                         name = passingObject.getString("name");
                         id = passingObject.getLong("id");
                         Log.d("NEXT ACTIVITY NAME", name);
@@ -131,7 +144,7 @@ public class AfterDestinationActivity extends ActionBarActivity {
                         Log.d("JSONEXCEPTION", e.getMessage());
                     }
 
-                    Intent intent = new Intent(AfterDestinationActivity.this, PlacesListActivity.class);
+                    Intent intent = new Intent(SecondSeriesActivity.this, PlacesListActivity.class);
                     intent.putExtra("id", id);
                     intent.putExtra("name", name);
                     intent.putExtra("placesList", nextPlacesList);
