@@ -30,7 +30,7 @@
                 android:id="@+id/summaryLabel"
                 android:paddingLeft="16dp"
                 android:background="@color/gray"
-                android:layout_weight=".5"
+                android:layout_weight=".1"
                 android:text="summary"/>
 
             <TextView
@@ -41,6 +41,17 @@
                 android:paddingLeft="16dp"
                 android:paddingTop="16dp"
                 tools:text="actual summary"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/contactsLabel"
+                android:background="@color/gray"
+                android:layout_below="@+id/summary"
+                android:paddingTop="5dp"
+                android:paddingLeft="16dp"
+                android:text="contact"
+                />
 
     </RelativeLayout>
 

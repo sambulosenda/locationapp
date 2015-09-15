@@ -103,16 +103,13 @@ public class SeriesActivity extends ActionBarActivity {
             mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String name;
                 Long id;
+
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     JSONObject passingObject = modelsObjectList.get(position);
                     ArrayList<String> nextPlacesList = new ArrayList<>();
 
-
-
                     try {
-
-
                         if(passingObject.optJSONArray("places") == null){
                             Log.v("WE ARE IN THE LOOP", "in the loop");
                             ArrayList<String> nextSeriesList = new ArrayList<>();
@@ -137,6 +134,7 @@ public class SeriesActivity extends ActionBarActivity {
 
                         Log.v("SHOULDN'T BE HERE", "this is bad");
                         JSONArray places = passingObject.getJSONArray("places");
+
                         for(int i = 0; i < places.length(); i++){
                             nextPlacesList.add(places.getString(i));
 
@@ -144,6 +142,8 @@ public class SeriesActivity extends ActionBarActivity {
 
                         name = passingObject.getString("name");
                         id = passingObject.getLong("id");
+
+
                         Log.d("NEXT ACTIVITY NAME", name);
                         System.out.println("NEXT ACTIVITY ID " + id);
                         Log.d("NEXT SERIES LIST", nextPlacesList.toString());
@@ -156,6 +156,7 @@ public class SeriesActivity extends ActionBarActivity {
                     intent.putExtra("id", id);
                     intent.putExtra("name", name);
                     intent.putExtra("placesList", nextPlacesList);
+
                     startActivity(intent);
                 }
             });

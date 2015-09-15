@@ -43,12 +43,9 @@ public class PlacesListAdapter extends ArrayAdapter<String> {
         String summaryPreview = "";
 
 
-        int count = 0;
-        int i = 0;
-        String temp = "";
 
-        summaryPreview = formatSummary(fullSummary);
-        summary.setText(summaryPreview);
+        //summaryPreview = formatSummary(fullSummary);
+        summary.setText(fullSummary);
         textView.setTypeface(roboto);
 
 
@@ -69,8 +66,10 @@ public class PlacesListAdapter extends ArrayAdapter<String> {
         }
 
         if(stringCount < 10){
+
             summaryPreview = fullSummary + "...";
             return summaryPreview;
+
         }else{
             while(count != 10){
                 temp += fullSummary.charAt(i);

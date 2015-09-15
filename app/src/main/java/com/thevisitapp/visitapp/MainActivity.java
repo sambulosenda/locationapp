@@ -30,7 +30,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         new CallDestination().execute();
 
     }
@@ -147,7 +146,6 @@ public class MainActivity extends ActionBarActivity {
                     intent.putExtra("nextSeries", nextSeriesList);
                     intent.putExtra("name", name);
                     startActivity(intent);
-
 
                 }
             });

@@ -34,6 +34,7 @@ public class PlacesListActivity extends ActionBarActivity {
         Long id = extras.getLong("id");
         String name = extras.getString("name");
         placesIds = extras.getStringArrayList("placesList");
+        String phone = extras.getString("phone");
 
 
         getSupportActionBar().setTitle(name);
@@ -96,6 +97,7 @@ public class PlacesListActivity extends ActionBarActivity {
                 String name;
                 String zoom;
                 String summary;
+                String phone;
 
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -104,9 +106,11 @@ public class PlacesListActivity extends ActionBarActivity {
 
                     try {
                         JSONArray nextActivityMapLocations = nextActivityObject.getJSONArray("locations");
+                        JSONObject contacts = nextActivityObject.getJSONObject("contacts");
 
                         name = nextActivityObject.getString("name");
                         summary = nextActivityObject.getString("summary");
+                        phone = contacts.getString("phone");
 
                         for(int i = 0; i < nextActivityMapLocations.length(); i++){
                             listOfLatLng.add((nextActivityMapLocations.getJSONObject(i).getString("latitude")));

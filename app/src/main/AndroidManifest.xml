@@ -39,7 +39,8 @@
         </activity>
         <activity
             android:name=".PlacesListActivity"
-            android:label="@string/title_activity_places_list" >
+            android:label="@string/title_activity_places_list"
+            android:parentActivityName="com.thevisitapp.visitapp.SeriesActivity">
         </activity>
 
         <meta-data
