@@ -29,11 +29,13 @@
         </activity>
         <activity
             android:name=".SearchActivity"
-            android:label="@string/title_activity_search" >
+            android:label="@string/title_activity_search">
+
         </activity>
         <activity
             android:name=".SeriesActivity"
-            android:label="@string/title_activity_after_destination" >
+            android:label="@string/title_activity_after_destination"
+            android:parentActivityName="com.thevisitapp.visitapp.MainActivity">
         </activity>
         <activity
             android:name=".PlacesListActivity"
@@ -49,14 +51,21 @@
 
         <activity
             android:name=".PlacesActivity"
-            android:label="@string/title_activity_maps" >
+            android:label="@string/title_activity_maps"
+            android:parentActivityName="com.thevisitapp.visitapp.SeriesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.thevisitapp.visitapp.PlacesListActivity" />
         </activity>
         <activity
             android:name=".SecondSeriesActivity"
-            android:label="@string/title_activity_second_series" >
+            android:label="@string/title_activity_second_series"
+            android:parentActivityName="com.thevisitapp.visitapp.SeriesActivity">
+        </activity>
+        <activity
+            android:name=".ThirdSeriesActivity"
+            android:label="@string/title_activity_third_series"
+            android:parentActivityName="com.thevisitapp.visitapp.SecondSeriesActivity">
         </activity>
     </application>
 

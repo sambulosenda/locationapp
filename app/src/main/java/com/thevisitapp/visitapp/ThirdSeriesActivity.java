@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class SecondSeriesActivity extends ActionBarActivity {
+public class ThirdSeriesActivity extends ActionBarActivity {
 
     ListView mList;
 
@@ -94,10 +94,10 @@ public class SecondSeriesActivity extends ActionBarActivity {
 
 
             Log.d("MODEL NAMES", modelNames.toString());
-            Toast.makeText(SecondSeriesActivity.this, modelNames.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(ThirdSeriesActivity.this, modelNames.toString(), Toast.LENGTH_LONG).show();
 
             mList = (ListView) findViewById(android.R.id.list);
-            CustomMainAdapter mainAdapter = new CustomMainAdapter(SecondSeriesActivity.this, modelNames);
+            CustomMainAdapter mainAdapter = new CustomMainAdapter(ThirdSeriesActivity.this, modelNames);
             mList.setAdapter(mainAdapter);
 
 
@@ -122,7 +122,7 @@ public class SecondSeriesActivity extends ActionBarActivity {
                             System.out.println("NEXT ACTIVITY ID " + id);
                             Log.d("NEXT SERIES LIST", nextPlacesList.toString());
 
-                            Intent intent = new Intent(SecondSeriesActivity.this, SecondSeriesActivity.class);
+                            Intent intent = new Intent(ThirdSeriesActivity.this, SecondSeriesActivity.class);
                             intent.putExtra("id", id);
                             intent.putExtra("name", name);
                             intent.putExtra("placesList", nextPlacesList);
@@ -145,7 +145,7 @@ public class SecondSeriesActivity extends ActionBarActivity {
                         Log.d("JSONEXCEPTION", e.getMessage());
                     }
 
-                    Intent intent = new Intent(SecondSeriesActivity.this, PlacesListActivity.class);
+                    Intent intent = new Intent(ThirdSeriesActivity.this, PlacesListActivity.class);
                     intent.putExtra("id", id);
                     intent.putExtra("name", name);
                     intent.putExtra("placesList", nextPlacesList);

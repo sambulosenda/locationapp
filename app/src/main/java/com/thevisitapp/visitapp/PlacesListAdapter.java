@@ -59,23 +59,33 @@ public class PlacesListAdapter extends ArrayAdapter<String> {
     private String formatSummary(String fullSummary) {
         String summaryPreview = "";
         int count = 0;
+        int stringCount = 0;
         int i = 0;
         String temp = "";
-        while(count != 10){
-
-            temp += fullSummary.charAt(i);
-
+        for(int j = 0; j < fullSummary.length(); i++){
             if(fullSummary.charAt(i) == ' '){
-                summaryPreview += " " + temp;
-                count++;
-                temp = "";
+                stringCount++;
             }
-            if(count == 10){
-                summaryPreview += "...";
-            }
-            i++;
-
         }
+
+        if(stringCount < 10){
+            summaryPreview = fullSummary + "...";
+            return summaryPreview;
+        }else{
+            while(count != 10){
+                temp += fullSummary.charAt(i);
+                if(fullSummary.charAt(i) == ' '){
+                    summaryPreview += " " + temp;
+                    count++;
+                    temp = "";
+                }
+                if(count == 10){
+                    summaryPreview += "...";
+                }
+                i++;
+            }
+        }
+
         return summaryPreview;
     }
 }

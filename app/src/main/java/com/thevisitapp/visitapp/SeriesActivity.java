@@ -42,7 +42,7 @@ public class SeriesActivity extends ActionBarActivity {
         Log.d("ADACTIVITY NAME", name);
 
         getSupportActionBar().setTitle(name);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         new Series().execute(seriesIds, placesIds);
     }

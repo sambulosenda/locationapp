@@ -36,9 +36,10 @@ public class PlacesListActivity extends ActionBarActivity {
         placesIds = extras.getStringArrayList("placesList");
 
 
-        //getSupportActionBar().setTitle(name);
+        getSupportActionBar().setTitle(name);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //TODO certain places don't get passed in i.e. fast food
-        //Log.d("PLACESLISTNAME", name);
+        Log.d("PLACESLISTNAME", name);
 
         Place place = new Place();
         place.execute(placesIds);
